@@ -26,7 +26,6 @@ type Post struct {
 	Content string `json:"content"`
 }
 
-// getAllPosts retrieves metadata for all blog posts
 func getAllPosts() ([]PostMetadata, error) {
 	var posts []PostMetadata
 	files, err := filepath.Glob("content/*.md")
@@ -43,7 +42,6 @@ func getAllPosts() ([]PostMetadata, error) {
 	return posts, nil
 }
 
-// getPostContent reads a specific post by filename and returns its rendered content
 func getPostContent(id string) (Post, error) {
 	data, err := os.ReadFile(fmt.Sprintf("content/%s.md", id))
 	if err != nil {
@@ -63,7 +61,7 @@ func getPostContent(id string) (Post, error) {
 	return Post{Content: buf.String()}, nil
 }
 
-// parseMarkdown extracts metadata and content from a markdown file
+// extracts metadata and content from a markdown file
 func parseMarkdownMetadata(filename string) (PostMetadata, error) {
 	data, err := os.ReadFile(filename)
 	if err != nil {
@@ -78,7 +76,7 @@ func parseMarkdownMetadata(filename string) (PostMetadata, error) {
 	return metadata, nil
 }
 
-// extractTitle parses the title from the front matter (or default if not found)
+// parses the title from the front matter (or default if not found)
 func extractFrontMatter(data []byte) (PostMetadata, error) {
 	var buf strings.Builder
 	var metadata PostMetadata
@@ -99,13 +97,13 @@ func extractFrontMatter(data []byte) (PostMetadata, error) {
 	return metadata, nil
 }
 
-// handler for listing all posts
+// returns the listing of all posts
 func PostsHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 
-	if r.URL.Path != "/api/posts" || r.Method != http.MethodGet {
-		http.NotFound(w, r)
+	if r.Method != http.MethodGet {
+		http.Error(w, "Only GET requests allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
@@ -124,7 +122,7 @@ func PostsHandler(w http.ResponseWriter, r *http.Request) {
 // handler for fetching a single post by ID
 func PostHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
-		http.NotFound(w, r)
+		http.Error(w, "Only GET requests allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
