@@ -1,7 +1,10 @@
+import Posts from "./Posts";
+
 function Home() {
   return (
     <>
-    <h1>Home!</h1>
+    <p className="fs-1 text-center">LinuxTheKernel</p> 
+    <Posts/>
     </>
   );
 }

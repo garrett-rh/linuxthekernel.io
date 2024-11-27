@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"linuxthekernel.io/handlers"
 )
@@ -22,8 +24,24 @@ func main() {
 			return
 		}
 
-		_, err := os.Stat("./static" + r.URL.Path)
-		if err == nil {
+		// helps with the markdown -> html conversion
+		// this will likely go away if/when i move away from serving from the filesystem
+		if strings.Contains(r.URL.Path, "imgs") {
+			// grab the image name from the file path
+			urlParts := strings.Split(r.URL.Path, "/")
+			imgPath := fmt.Sprintf("./content/imgs/%s", urlParts[len(urlParts)-1])
+
+			if _, err := os.Stat(imgPath); err == nil {
+				http.ServeFile(w, r, imgPath)
+			} else if os.IsNotExist(err) {
+				http.NotFound(w, r)
+			} else {
+				http.Error(w, "Forbidden", http.StatusForbidden)
+			}
+			return
+		}
+
+		if _, err := os.Stat("./static" + r.URL.Path); err == nil {
 			fs.ServeHTTP(w, r)
 		} else if os.IsNotExist(err) {
 			http.ServeFile(w, r, "./static/index.html")

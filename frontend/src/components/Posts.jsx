@@ -25,13 +25,12 @@ function Posts() {
 
   return (
     <div>
-      <h2>Posts!</h2>
       <hr />
       {posts.map((p) => (
         <div>
-          <Link to={`/posts/${p.id}`}>{p.title}</Link>
-          <p>Date: {p.date}</p>
-          <p>Tags: {p.tags}</p>
+          <Link to={`/blog/${p.id}`}>{p.title}</Link>
+          <p>{p.date}</p>
+          <p>{p.summary}</p>
           <hr />
         </div>
       ))}

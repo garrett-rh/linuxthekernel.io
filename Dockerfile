@@ -11,8 +11,8 @@ FROM node:18 AS frontend-build
 WORKDIR /frontend
 COPY ./frontend .
 
-RUN npm install -D vite && \
-    npm install --omit=dev
+RUN npm install && \
+    npm run build
 
 FROM gcr.io/distroless/static-debian12 AS prod
 
