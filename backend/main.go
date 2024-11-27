@@ -14,15 +14,12 @@ func main() {
 	http.HandleFunc("GET /api/posts", handlers.PostsHandler)
 	http.HandleFunc("GET /api/posts/{id}", handlers.PostHandler)
 
-	// kind of a hack to ensure that we serve the images properly. Will probably go away if I find it in me to add in a database or some sort of external image storage
-	http.HandleFunc("GET /blog/imgs/{id}", handlers.ImageHandler)
-
 	files := http.FileServer(http.Dir("./static"))
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 
 		if r.URL.Path == "/" || r.URL.Path == "/index.html" {
-			http.ServeFile(w, r, "./static/index.html")
+			files.ServeHTTP(w, r)
 			return
 		}
 

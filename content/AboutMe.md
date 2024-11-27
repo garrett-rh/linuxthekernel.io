@@ -18,4 +18,4 @@ Outside of work, I enjoy staying away from computers as much as possible. I try 
 
 ## Cat Tax
 
-![Steve and Maggie](./imgs/maggie_steve.jpg)
+![Steve and Maggie](https://d17x1veniq4brh.cloudfront.net/maggie_steve.jpg)
