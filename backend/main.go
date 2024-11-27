@@ -1,22 +1,24 @@
 package main
 
 import (
-	"fmt"
+	"errors"
+	"io/fs"
 	"log"
 	"net/http"
 	"os"
-	"strings"
 
 	"linuxthekernel.io/handlers"
 )
 
 func main() {
-	http.HandleFunc("/api/posts", handlers.PostsHandler)
-	http.HandleFunc("/api/posts/", handlers.PostHandler)
+	http.HandleFunc("GET /api/posts", handlers.PostsHandler)
+	http.HandleFunc("GET /api/posts/{id}", handlers.PostHandler)
 
-	fs := http.FileServer(http.Dir("./static"))
+	// kind of a hack to ensure that we serve the images properly. Will probably go away if I find it in me to add in a database or some sort of external image storage
+	http.HandleFunc("GET /blog/imgs/{id}", handlers.ImageHandler)
 
-	// Custom handler to support client-side routing
+	files := http.FileServer(http.Dir("./static"))
+
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 
 		if r.URL.Path == "/" || r.URL.Path == "/index.html" {
@@ -24,26 +26,9 @@ func main() {
 			return
 		}
 
-		// helps with the markdown -> html conversion
-		// this will likely go away if/when i move away from serving from the filesystem
-		if strings.Contains(r.URL.Path, "imgs") {
-			// grab the image name from the file path
-			urlParts := strings.Split(r.URL.Path, "/")
-			imgPath := fmt.Sprintf("./content/imgs/%s", urlParts[len(urlParts)-1])
-
-			if _, err := os.Stat(imgPath); err == nil {
-				http.ServeFile(w, r, imgPath)
-			} else if os.IsNotExist(err) {
-				http.NotFound(w, r)
-			} else {
-				http.Error(w, "Forbidden", http.StatusForbidden)
-			}
-			return
-		}
-
 		if _, err := os.Stat("./static" + r.URL.Path); err == nil {
-			fs.ServeHTTP(w, r)
-		} else if os.IsNotExist(err) {
+			files.ServeHTTP(w, r)
+		} else if errors.Is(err, fs.ErrNotExist) {
 			http.ServeFile(w, r, "./static/index.html")
 		} else {
 			http.Error(w, "Forbidden", http.StatusForbidden)
