@@ -32,6 +32,6 @@ func main() {
 		}
 	})
 
-	log.Println("Starting server on :8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Println("Starting server on :443")
+	log.Fatal(http.ListenAndServeTLS(":443", "/secrets/chain.pem", "/secrets/priv.key", nil))
 }
