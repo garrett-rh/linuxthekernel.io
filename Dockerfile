@@ -22,7 +22,4 @@ COPY --from=backend-build /backend/linuxthekernel.io .
 COPY --from=frontend-build /frontend/dist/ ./static
 COPY ./content /app/content
 
-COPY ./secrets/ /secrets/
-COPY ./secrets/ /secrets/
-
 ENTRYPOINT ["/app/linuxthekernel.io"]
