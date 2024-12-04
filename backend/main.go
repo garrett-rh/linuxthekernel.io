@@ -33,5 +33,5 @@ func main() {
 	})
 
 	log.Println("Starting server on :443")
-	log.Fatal(http.ListenAndServeTLS(":443", "/secrets/chain.pem", "/secrets/priv.key", nil))
+	log.Fatal(http.ListenAndServeTLS(":443", "/secrets/fullchain.pem", "/secrets/privkey.pem", nil))
 }
