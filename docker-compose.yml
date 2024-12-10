@@ -1,0 +1,31 @@
+services:
+  app:
+    image: linuxthekernel
+    container_name: linuxthekernel
+    build:
+      dockerfile: ./Dockerfile
+    ports:
+      - "443:443"
+    secrets:
+      - cert
+      - key
+    command:
+      - "-tls"
+      - "-port=443"
+      - "-key=/run/secrets/key"
+      - "-cert=/run/secrets/cert"
+
+  proxy:
+    image: nginx:latest
+    build:
+      context: ./proxy
+      dockerfile: Dockerfile
+    container_name: my_proxy
+    ports:
+      - "80:80"
+
+secrets:
+  cert:
+    file: /etc/letsencrypt/live/linuxthekernel.io/fullchain.pem
+  key: 
+    file: /etc/letsencrypt/live/linuxthekernel.io/privkey.pem

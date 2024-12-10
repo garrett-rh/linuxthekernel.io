@@ -2,7 +2,9 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"io/fs"
+	"linuxthekernel.io/config"
 	"log"
 	"net/http"
 	"os"
@@ -11,6 +13,8 @@ import (
 )
 
 func main() {
+	c := config.Config{}
+	c.PopulateConfig()
 	http.HandleFunc("GET /api/posts", handlers.PostsHandler)
 	http.HandleFunc("GET /api/posts/{id}", handlers.PostHandler)
 
@@ -32,6 +36,11 @@ func main() {
 		}
 	})
 
-	log.Println("Starting server on :443")
-	log.Fatal(http.ListenAndServeTLS(":443", "/secrets/fullchain.pem", "/secrets/privkey.pem", nil))
+	if c.Tls {
+		log.Printf("Listening on port %d", c.Port)
+		log.Fatal(http.ListenAndServeTLS(fmt.Sprintf(":%d", c.Port), c.Cert, c.Key, nil))
+	} else {
+		log.Printf("Listening on port %d", c.Port)
+		log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", c.Port), nil))
+	}
 }
