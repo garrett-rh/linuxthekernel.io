@@ -13,11 +13,6 @@ func PostsHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 
-	if r.Method != http.MethodGet {
-		http.Error(w, "Only GET requests allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
 	posts, err := markdown.GetAllPosts()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
