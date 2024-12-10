@@ -1,4 +1,6 @@
-package helpers
+// Package markdown contains all of my markdown/post specific things
+// includes things like parsing out the metadata of the files
+package markdown
 
 import (
 	"errors"
@@ -12,7 +14,7 @@ import (
 	"go.abhg.dev/goldmark/frontmatter"
 )
 
-// Post represents the metadata and content of a blog post
+// PostMetadata represents the metadata and content of a blog post
 type PostMetadata struct {
 	ID      string   `json:"id"`
 	Title   string   `json:"title"`
@@ -21,10 +23,13 @@ type PostMetadata struct {
 	Tags    []string `json:"tags"`
 }
 
+// Post is just the content string after the metadata
 type Post struct {
 	Content string `json:"content"`
 }
 
+// GetAllPosts returns a listing of all markdown files found in the content folder.
+// Will then parse our the metadata and returns a list of all the posts
 func GetAllPosts() ([]PostMetadata, error) {
 	var posts []PostMetadata
 	files, err := filepath.Glob("content/*.md")
@@ -41,6 +46,7 @@ func GetAllPosts() ([]PostMetadata, error) {
 	return posts, nil
 }
 
+// GetPostContent returns the post content and ignores the header metadata
 func GetPostContent(id string) (Post, error) {
 	data, err := os.ReadFile(fmt.Sprintf("content/%s.md", id))
 	if err != nil {
@@ -60,7 +66,7 @@ func GetPostContent(id string) (Post, error) {
 	return Post{Content: buf.String()}, nil
 }
 
-// extracts metadata and content from a markdown file
+// parseMarkdownMetadata extracts metadata from a markdown file
 func parseMarkdownMetadata(filename string) (PostMetadata, error) {
 	data, err := os.ReadFile(filename)
 	if err != nil {
@@ -75,7 +81,7 @@ func parseMarkdownMetadata(filename string) (PostMetadata, error) {
 	return metadata, nil
 }
 
-// parses the title from the front matter (or default if not found)
+// extractFrontMatter parses the title from the front matter
 func extractFrontMatter(data []byte) (PostMetadata, error) {
 	var buf strings.Builder
 	var metadata PostMetadata
@@ -90,7 +96,7 @@ func extractFrontMatter(data []byte) (PostMetadata, error) {
 	}
 	d := frontmatter.Get(ctx)
 	if err := d.Decode(&metadata); err != nil {
-		return PostMetadata{}, errors.New("Failed to read metadata")
+		return PostMetadata{}, errors.New("failed to read metadata")
 	}
 
 	return metadata, nil

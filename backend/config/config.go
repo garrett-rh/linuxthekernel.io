@@ -1,3 +1,5 @@
+// parses down the config values
+// environment variables are overwritten by cmd args
 package config
 
 import (
@@ -29,16 +31,41 @@ func (c *Config) PopulateConfig() *Config {
 }
 
 func (c *Config) cmdArgs() {
+	// if set, key and cert should be set as well
+	// otherwise they will default to /run/secrets/key and /run/secrets/cert respectfully
 	tls := flag.Bool("tls", false, "Enable TLS")
+
+	// arbitrary port to listen on
 	port := flag.Int("port", 80, "Port to listen on")
+	// these below flags will be ignored if tls is not set
 	key := flag.String("key", "/run/secrets/key", "Path to private key")
 	cert := flag.String("cert", "/run/secrets/cert", "Path to certificate")
 	flag.Parse()
 
-	c.Tls = *tls
-	c.Cert = *cert
-	c.Key = *key
-	c.Port = *port
+	if isFlagPassed("tls") {
+		c.Tls = *tls
+	}
+	if isFlagPassed("port") {
+		c.Port = *port
+	}
+	if isFlagPassed("key") {
+		c.Key = *key
+	}
+	if isFlagPassed("cert") {
+		c.Cert = *cert
+	}
+}
+
+// verifies that we were given a specific flag
+// used to verify that
+func isFlagPassed(name string) bool {
+	found := false
+	flag.Visit(func(f *flag.Flag) {
+		if f.Name == name {
+			found = true
+		}
+	})
+	return found
 }
 
 // looks for env vars
@@ -46,6 +73,7 @@ func (c *Config) cmdArgs() {
 // looks for env vars of the format 'LTK_VARNAME'
 func (c *Config) envVars() error {
 	var err error
+	// only accept a true value, naively assume all other values are false
 	if os.Getenv("LTK_TLS") == "true" {
 		c.Tls = true
 	}

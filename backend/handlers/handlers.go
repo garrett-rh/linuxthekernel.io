@@ -1,13 +1,14 @@
+// Package handlers contains API http handlers
 package handlers
 
 import (
 	"encoding/json"
 	"net/http"
 
-	"linuxthekernel.io/helpers"
+	"linuxthekernel.io/markdown"
 )
 
-// returns the listing of all posts
+// PostsHandler returns the listing of all posts
 func PostsHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
@@ -17,7 +18,7 @@ func PostsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	posts, err := helpers.GetAllPosts()
+	posts, err := markdown.GetAllPosts()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -29,12 +30,12 @@ func PostsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// handler for fetching a single post by ID
+// PostHandler handler for fetching a single post by ID
 func PostHandler(w http.ResponseWriter, r *http.Request) {
 
 	id := r.PathValue("id")
 
-	content, err := helpers.GetPostContent(id)
+	content, err := markdown.GetPostContent(id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
