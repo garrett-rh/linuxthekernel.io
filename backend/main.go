@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	c := config.Config{}
+	c := config.New()
 	c.PopulateConfig()
 	http.HandleFunc("GET /api/posts", handlers.PostsHandler)
 	http.HandleFunc("GET /api/posts/{id}", handlers.PostHandler)

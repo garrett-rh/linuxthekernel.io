@@ -16,9 +16,17 @@ type Config struct {
 	Key  string
 }
 
-// PopulateConfig Returns a config that is bootstrapped
-// Defaults to tls off, port 80
-// If any flag is set, will attempt to populate
+// New returns a config with reasonable defaults
+func New() *Config {
+	return &Config{
+		Tls:  false,
+		Port: 8080,
+		Cert: "",
+		Key:  "",
+	}
+}
+
+// PopulateConfig If any flag is set, will attempt to populate
 // If tls is set to false, cert and key flags will be ignored
 func (c *Config) PopulateConfig() *Config {
 	err := c.envVars()
