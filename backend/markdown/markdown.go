@@ -5,6 +5,7 @@ package markdown
 import (
 	"errors"
 	"fmt"
+	"github.com/yuin/goldmark/renderer/html"
 	"os"
 	"path/filepath"
 	"strings"
@@ -56,6 +57,7 @@ func GetPostContent(id string) (Post, error) {
 	var buf strings.Builder
 	md := goldmark.New(
 		goldmark.WithExtensions(&frontmatter.Extender{}),
+		goldmark.WithRendererOptions(html.WithUnsafe()),
 	)
 	ctx := parser.NewContext()
 
