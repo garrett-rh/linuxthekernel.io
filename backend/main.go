@@ -17,6 +17,8 @@ func main() {
 	c.PopulateConfig()
 	http.HandleFunc("GET /api/posts", handlers.PostsHandler)
 	http.HandleFunc("GET /api/posts/{id}", handlers.PostHandler)
+	http.HandleFunc("GET /api/car_tax/localities", handlers.LocalitiesHandler)
+	http.HandleFunc("POST /api/car_tax/calculate", handlers.CarTaxHandler)
 
 	files := http.FileServer(http.Dir("./static"))
 

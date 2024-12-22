@@ -5,6 +5,7 @@ import App from './App.jsx'
 import Home from './components/Home.jsx';
 import About from './components/About.jsx';
 import Post from './components/Post.jsx';
+import CarTax from "./components/CarTax.jsx";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "/blog/:id",
         element: <Post />
+      },
+      {
+        path: "/car_tax",
+        element: <CarTax />
       },
     ]
   }
