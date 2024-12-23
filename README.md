@@ -11,16 +11,8 @@ This will start a docker container, exposing port 80.
 
 ## Production
 
-Releasing into production is copying the necessary artifacts over to the production server.
-
-This list includes:
-- Certs
-- Keys
-- Compose file
-- Application container
-- Proxy container
-
-To build the production containers, run `docker compose build` from the root of the repo.
+Releasing into production is cloning the repo down to the production server.
+To build the production containers, run `docker compose --profile prod build` from the root of the repo.
 
 ### Caveats
 
