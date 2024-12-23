@@ -27,7 +27,7 @@ function Posts() {
     <div>
       <hr />
       {posts.map((p) => (
-        <div>
+        <div key={p.id}>
           <Link to={`/blog/${p.id}`}>{p.title}</Link>
           <p>{p.date}</p>
           <p>{p.summary}</p>

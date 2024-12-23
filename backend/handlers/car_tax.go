@@ -18,13 +18,13 @@ type locality struct {
 }
 
 var localityMapping = map[string]func(*carInfo){
-	"Arlington": (*carInfo).arlingtonTaxCalculator,
+	"Arlington County": (*carInfo).arlingtonTaxCalculator,
 }
 
 func LocalitiesHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	supportedLocalities := []locality{
-		{Name: "Arlington"},
+		{Name: "Arlington County"},
 	}
 	err := json.NewEncoder(w).Encode(supportedLocalities)
 	if err != nil {
@@ -79,6 +79,6 @@ func (c *carInfo) arlingtonTaxCalculator() {
 		c.Taxes += remainingValue * taxRate
 	}
 
-	// Round to the nearest whole number
-	c.Taxes = math.Trunc(c.Taxes)
+	// Truncate down to two decimal places
+	c.Taxes = math.Round(c.Taxes*100) / 100
 }
