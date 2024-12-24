@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"math"
 	"net/http"
 )
 
@@ -19,12 +18,16 @@ type locality struct {
 
 var localityMapping = map[string]func(*carInfo){
 	"Arlington County": (*carInfo).arlingtonTaxCalculator,
+	"Fairfax County":   (*carInfo).fairfaxTaxCalculator,
+	"Alexandria City":  (*carInfo).alexandriaTaxCalculator,
 }
 
 func LocalitiesHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	supportedLocalities := []locality{
 		{Name: "Arlington County"},
+		{Name: "Fairfax County"},
+		{Name: "Alexandria City"},
 	}
 	err := json.NewEncoder(w).Encode(supportedLocalities)
 	if err != nil {
@@ -78,7 +81,46 @@ func (c *carInfo) arlingtonTaxCalculator() {
 		// remaining amount is unforgiven
 		c.Taxes += remainingValue * taxRate
 	}
+}
 
-	// Truncate down to two decimal places
-	c.Taxes = math.Round(c.Taxes*100) / 100
+// https://www.fairfaxcounty.gov/taxes/vehicles/vehicle-tax-subsidy
+func (c *carInfo) fairfaxTaxCalculator() {
+	const (
+		taxRate          = .0457
+		reliefUpperBound = 20000.0
+		reliefRate       = .5
+	)
+	if c.Value <= reliefUpperBound {
+		c.Taxes = (c.Value * taxRate) * reliefRate
+	} else {
+		c.Taxes = (c.Value * taxRate) - ((reliefUpperBound * taxRate) * reliefRate)
+	}
+}
+
+// https://www.alexandriava.gov/CarTax
+func (c *carInfo) alexandriaTaxCalculator() {
+	const (
+		taxRate              = .0533
+		fullReliefAmount     = 5000.0
+		boundOneRelief       = 20000.0
+		boundOneReliefRate   = .48
+		boundTwoRelief       = 25000.0
+		boundTwoReliefRate   = .74
+		boundThreeReliefRate = .88
+	)
+	if c.Value <= fullReliefAmount {
+		c.Taxes = 0
+	} else if c.Value <= boundOneRelief {
+		c.Taxes = (c.Value * taxRate) * boundOneReliefRate
+	} else if c.Value <= boundTwoRelief {
+		// full rate for all above 20000
+		c.Taxes = (c.Value - boundOneRelief) * taxRate
+		// partial rate for first 20000
+		c.Taxes += (boundOneRelief * taxRate) * boundTwoReliefRate
+	} else {
+		// full rate for all above 20000
+		c.Taxes = (c.Value - boundOneRelief) * taxRate
+		//partial rate for first 20000
+		c.Taxes += (boundOneRelief * taxRate) * boundThreeReliefRate
+	}
 }
