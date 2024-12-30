@@ -1,4 +1,4 @@
-// parses down the config values
+// Package config parses down the config values
 // environment variables are overwritten by cmd args
 package config
 
