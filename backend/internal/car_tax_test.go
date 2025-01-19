@@ -1,4 +1,4 @@
-package handlers
+package internal
 
 import (
 	"testing"
@@ -54,14 +54,14 @@ func Test_carInfo_alexandriaTaxCalculator(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := &carInfo{
+			c := &CarInfo{
 				Value:    tt.fields.Value,
 				Locality: tt.fields.Locality,
 				Taxes:    tt.fields.Taxes,
 			}
 			c.alexandriaTaxCalculator()
 			if got := c.Taxes; got != tt.want {
-				t.Errorf("carInfo.alexandriaTaxCalculator() = %v, want %v", got, tt.want)
+				t.Errorf("CarInfo.alexandriaTaxCalculator() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -108,14 +108,14 @@ func Test_carInfo_arlingtonTaxCalculator(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := &carInfo{
+			c := &CarInfo{
 				Value:    tt.fields.Value,
 				Locality: tt.fields.Locality,
 				Taxes:    tt.fields.Taxes,
 			}
 			c.arlingtonTaxCalculator()
 			if got := c.Taxes; got != tt.want {
-				t.Errorf("carInfo.arlingtonTaxCalculator() = %v, want %v", got, tt.want)
+				t.Errorf("CarInfo.arlingtonTaxCalculator() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -153,14 +153,14 @@ func Test_carInfo_fairfaxTaxCalculator(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := &carInfo{
+			c := &CarInfo{
 				Value:    tt.fields.Value,
 				Locality: tt.fields.Locality,
 				Taxes:    tt.fields.Taxes,
 			}
 			c.fairfaxTaxCalculator()
 			if got := c.Taxes; got != tt.want {
-				t.Errorf("carInfo.fairfaxTaxCalculator() = %v, want %v", got, tt.want)
+				t.Errorf("CarInfo.fairfaxTaxCalculator() = %v, want %v", got, tt.want)
 			}
 		})
 	}

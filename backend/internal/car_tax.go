@@ -1,59 +1,15 @@
-package handlers
+package internal
 
-import (
-	"encoding/json"
-	"net/http"
-)
-
-type carInfo struct {
+type CarInfo struct {
 	// yea i know you aren't supposed to use floats for money but im feeling lazy
 	Value    float64 `json:"value"`
 	Locality string  `json:"locality"`
 	Taxes    float64 `json:"taxes"`
 }
 
-type locality struct {
-	Name string `json:"name"`
-}
-
-var localityMapping = map[string]func(*carInfo){
-	"Arlington County": (*carInfo).arlingtonTaxCalculator,
-	"Fairfax County":   (*carInfo).fairfaxTaxCalculator,
-	"Alexandria City":  (*carInfo).alexandriaTaxCalculator,
-}
-
-func LocalitiesHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	supportedLocalities := []locality{
-		{Name: "Arlington County"},
-		{Name: "Fairfax County"},
-		{Name: "Alexandria City"},
-	}
-	err := json.NewEncoder(w).Encode(supportedLocalities)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-}
-
-func CarTaxHandler(w http.ResponseWriter, r *http.Request) {
-	var car carInfo
-	w.Header().Set("Content-Type", "application/json")
-	err := json.NewDecoder(r.Body).Decode(&car)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-	}
-	if fn := localityMapping[car.Locality]; fn != nil {
-		fn(&car)
-	}
-	err = json.NewEncoder(w).Encode(car)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-}
-
 // https://www.arlingtonva.us/Government/Programs/Taxes/Vehicles/Vehicle-Tax-Relief
 // see the above link for where these numbers come from
-func (c *carInfo) arlingtonTaxCalculator() {
+func (c *CarInfo) ArlingtonTaxCalculator() {
 	// generic tax rate before relief
 	const (
 		taxRate                   = .05
@@ -84,7 +40,7 @@ func (c *carInfo) arlingtonTaxCalculator() {
 }
 
 // https://www.fairfaxcounty.gov/taxes/vehicles/vehicle-tax-subsidy
-func (c *carInfo) fairfaxTaxCalculator() {
+func (c *CarInfo) FairfaxTaxCalculator() {
 	const (
 		taxRate          = .0457
 		reliefUpperBound = 20000.0
@@ -98,7 +54,7 @@ func (c *carInfo) fairfaxTaxCalculator() {
 }
 
 // https://www.alexandriava.gov/CarTax
-func (c *carInfo) alexandriaTaxCalculator() {
+func (c *CarInfo) AlexandriaTaxCalculator() {
 	const (
 		taxRate              = .0533
 		fullReliefAmount     = 5000.0
