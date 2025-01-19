@@ -4,6 +4,17 @@ This repository contains all the stuff needed to run my personal blog/website.
 
 Right now it is pretty barebones, but I'll be incrementally adding to it over time.
 
+## Environment Setup
+
+To run, you'll need the following (or at least this is what I'm running with).
+
+| Requirement        | Notes                            |
+|--------------------|----------------------------------|
+| Docker             | Version 27.4                     |
+| Docker Compose     | Version 2.31.0                   |
+| /opt/ltk/psql_pass | Password for the PSQL deployment |
+
+
 ## Running
 
 Local development can occur via running `docker compose --profile dev up --build`.

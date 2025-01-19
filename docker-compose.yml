@@ -35,8 +35,31 @@ services:
     ports:
       - "80:80"
 
+  postgres:
+    image: 'postgres:17'
+    profiles:
+      - "prod"
+      - "dev"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: /run/secrets/psql_pass
+      POSTGRES_DB: ltk
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    volumes:
+      - ltk_data:/opt/ltk/postgresql/data
+    secrets:
+      - psql_pass
+
+volumes:
+  ltk_data:
+
 secrets:
   cert:
     file: /etc/letsencrypt/live/linuxthekernel.io/fullchain.pem
   key: 
     file: /etc/letsencrypt/live/linuxthekernel.io/privkey.pem
+  psql_pass:
+    file: /opt/ltk/psql_pass
