@@ -4,21 +4,18 @@ import (
 	"errors"
 	"fmt"
 	"io/fs"
-	"linuxthekernel.io/config"
 	"log"
 	"net/http"
 	"os"
-
-	"linuxthekernel.io/handlers"
 )
 
 func main() {
-	c := config.New()
+	c := New()
 	c.PopulateConfig()
-	http.HandleFunc("GET /api/posts", handlers.PostsHandler)
-	http.HandleFunc("GET /api/posts/{id}", handlers.PostHandler)
-	http.HandleFunc("GET /api/car_tax/localities", handlers.LocalitiesHandler)
-	http.HandleFunc("POST /api/car_tax/calculate", handlers.CarTaxHandler)
+	http.HandleFunc("GET /api/posts", PostsHandler)
+	http.HandleFunc("GET /api/posts/{id}", PostHandler)
+	http.HandleFunc("GET /api/car_tax/localities", LocalitiesHandler)
+	http.HandleFunc("POST /api/car_tax/calculate", CarTaxHandler)
 
 	files := http.FileServer(http.Dir("./static"))
 

@@ -1,6 +1,6 @@
 // Package config parses down the config values
 // environment variables are overwritten by cmd args
-package config
+package main
 
 import (
 	"flag"
