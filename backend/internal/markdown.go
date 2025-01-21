@@ -1,4 +1,4 @@
-// Package markdown contains all of my markdown/post specific things
+// Package internal contains all of my markdown/post specific things
 // includes things like parsing out the metadata of the files
 package internal
 
