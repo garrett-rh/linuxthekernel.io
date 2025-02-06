@@ -1,12 +1,9 @@
 package main
 
 import (
-	"errors"
 	"fmt"
-	"io/fs"
 	"log"
 	"net/http"
-	"os"
 )
 
 func main() {
@@ -17,22 +14,9 @@ func main() {
 	http.HandleFunc("GET /api/car_tax/localities", LocalitiesHandler)
 	http.HandleFunc("POST /api/car_tax/calculate", CarTaxHandler)
 
-	files := http.FileServer(http.Dir("./static"))
-
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-
-		if r.URL.Path == "/" || r.URL.Path == "/index.html" {
-			files.ServeHTTP(w, r)
-			return
-		}
-
-		if _, err := os.Stat("./static" + r.URL.Path); err == nil {
-			files.ServeHTTP(w, r)
-		} else if errors.Is(err, fs.ErrNotExist) {
-			http.ServeFile(w, r, "./static/index.html")
-		} else {
-			http.Error(w, "Forbidden", http.StatusForbidden)
-		}
+		files := http.FileServer(http.Dir("./static"))
+		files.ServeHTTP(w, r)
 	})
 
 	if c.Tls {
