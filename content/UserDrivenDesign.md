@@ -8,6 +8,8 @@ tags: ["User", "Driven", "Design", "User Driven Design"]
 
 # User-Driven Design (UDD)
 
+*Bear with me as this is one of my first real blog posts. I'm still figuring out my style and how to make this intelligible.*
+
 One of my favorite ways to design a product is user-driven. I've found success in designing my
 software with the end user directly in mind. This design methodology is handy when 
 creating a product for highly technical individuals.
