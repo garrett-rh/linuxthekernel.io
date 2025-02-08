@@ -6,9 +6,12 @@ import (
 	"errors"
 	"fmt"
 	"github.com/yuin/goldmark/renderer/html"
+	"log"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
+	"time"
 
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/parser"
@@ -29,6 +32,10 @@ type Post struct {
 	Content string `json:"content"`
 }
 
+type Posts struct {
+	Posts []Post `json:"posts"`
+}
+
 // GetAllPosts returns a listing of all markdown files found in the content folder.
 // Will then parse our the metadata and returns a list of all the posts
 func GetAllPosts() ([]PostMetadata, error) {
@@ -44,6 +51,7 @@ func GetAllPosts() ([]PostMetadata, error) {
 			posts = append(posts, post)
 		}
 	}
+
 	return posts, nil
 }
 
@@ -102,4 +110,23 @@ func extractFrontMatter(data []byte) (PostMetadata, error) {
 	}
 
 	return metadata, nil
+}
+
+// SortPostsByDate takes a slice of PostMetadata and returns them sorted by date
+// Under the hood it relies on slices.SortFunc() to sort
+func SortPostsByDate(posts []PostMetadata) {
+	slices.SortFunc(posts, func(i, j PostMetadata) int {
+		iDate, err := time.Parse(time.DateOnly, i.Date)
+		if err != nil {
+			log.Printf("Failed to parse %s. Recieved: %s", i.Date, err.Error())
+			return 0
+		}
+		jDate, err := time.Parse(time.DateOnly, j.Date)
+		if err != nil {
+			log.Printf("Failed to parse %s. Recieved: %s", j.Date, err.Error())
+			return 0
+		}
+
+		return jDate.Compare(iDate)
+	})
 }

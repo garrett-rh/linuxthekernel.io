@@ -1,7 +1,7 @@
 ---
 id: "UserDrivenDesign"
 title: "User Driven Design"
-date: "2025-1-31"
+date: "2025-01-31"
 summary: "My opinions on user driven design"
 tags: ["User", "Driven", "Design", "User Driven Design"]
 ---
