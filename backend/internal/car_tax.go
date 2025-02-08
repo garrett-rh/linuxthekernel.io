@@ -1,3 +1,4 @@
+// Package internal car tax related functions
 package internal
 
 type CarInfo struct {

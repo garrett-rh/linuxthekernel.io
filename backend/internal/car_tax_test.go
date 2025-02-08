@@ -59,7 +59,7 @@ func Test_carInfo_alexandriaTaxCalculator(t *testing.T) {
 				Locality: tt.fields.Locality,
 				Taxes:    tt.fields.Taxes,
 			}
-			c.alexandriaTaxCalculator()
+			c.AlexandriaTaxCalculator()
 			if got := c.Taxes; got != tt.want {
 				t.Errorf("CarInfo.alexandriaTaxCalculator() = %v, want %v", got, tt.want)
 			}
@@ -113,7 +113,7 @@ func Test_carInfo_arlingtonTaxCalculator(t *testing.T) {
 				Locality: tt.fields.Locality,
 				Taxes:    tt.fields.Taxes,
 			}
-			c.arlingtonTaxCalculator()
+			c.ArlingtonTaxCalculator()
 			if got := c.Taxes; got != tt.want {
 				t.Errorf("CarInfo.arlingtonTaxCalculator() = %v, want %v", got, tt.want)
 			}
@@ -158,7 +158,7 @@ func Test_carInfo_fairfaxTaxCalculator(t *testing.T) {
 				Locality: tt.fields.Locality,
 				Taxes:    tt.fields.Taxes,
 			}
-			c.fairfaxTaxCalculator()
+			c.FairfaxTaxCalculator()
 			if got := c.Taxes; got != tt.want {
 				t.Errorf("CarInfo.fairfaxTaxCalculator() = %v, want %v", got, tt.want)
 			}
