@@ -32,7 +32,7 @@ the nuance involved in modern day infrastructure and developer environments. For
 well as it allows the designer to abstract away things like authentication and default configuration in favor of reasonable 
 defaults.
 
-<img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdWF4NDk1MHBoM2JyZjJ0cmFtbWYxamEwOWIyZGUweGRvcDU3ZTNnciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aCatQNctAK7PC1H4zh/giphy.gif"  class="img-fluid" alt="The Way"/>
+<img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdWF4NDk1MHBoM2JyZjJ0cmFtbWYxamEwOWIyZGUweGRvcDU3ZTNnciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aCatQNctAK7PC1H4zh/giphy.gif"  class="img-fluid" alt="Mandalorian This is The Way"/>
 
 ## How to Implement UDD
 

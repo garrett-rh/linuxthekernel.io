@@ -26,7 +26,9 @@ const Post = () => {
 
   return (
     <div>
+      <hr />
       <div dangerouslySetInnerHTML={{ __html: post }} />
+      <hr/>
     </div>
   );
 };
