@@ -6,11 +6,13 @@ import Home from './components/Home.jsx';
 import About from './components/About.jsx';
 import Post from './components/Post.jsx';
 import CarTax from "./components/CarTax.jsx";
+import PageNotFound from "./components/PageNotFound.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <PageNotFound />,
     children: [
       {
         index: true,
